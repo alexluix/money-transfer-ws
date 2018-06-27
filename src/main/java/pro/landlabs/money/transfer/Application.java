@@ -9,7 +9,7 @@ import java.net.URI;
 
 public class Application {
 
-    public static final String BASE_URI = "http://localhost:8080/myapp/";
+    public static final String BASE_URI = "http://localhost:8080/";
 
     public static HttpServer startServer() {
         final ResourceConfig rc = new ResourceConfig().packages("pro.landlabs.money.transfer");

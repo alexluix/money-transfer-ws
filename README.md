@@ -24,3 +24,4 @@ Simple money transfer web service.
 
 -   build: `mvn clean package`
 -   run: `mvn exec:java`
+-   apply code changes and run: `mvn compile exec:java`

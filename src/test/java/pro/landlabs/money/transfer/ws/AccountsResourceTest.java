@@ -1,17 +1,19 @@
-package pro.landlabs.money.transfer;
+package pro.landlabs.money.transfer.ws;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import pro.landlabs.money.transfer.Application;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
-public class MyResourceTest {
+public class AccountsResourceTest {
 
     private HttpServer server;
     private WebTarget target;
@@ -31,9 +33,9 @@ public class MyResourceTest {
     }
 
     @Test
-    public void testGetIt() {
-        String responseMsg = target.path("myresource").request().get(String.class);
-        assertEquals("Got it!", responseMsg);
+    public void shouldReturnAccountJson() {
+        String responseMsg = target.path("accounts").request().get(String.class);
+        assertThat(responseMsg, equalTo("{\"balance\":150,\"id\":1}"));
     }
 
 }

@@ -24,7 +24,7 @@ public class AccountServiceMoneyTransferConcurrentTest extends AccountServiceAbs
         ExecutorService executorService = Executors.newFixedThreadPool(8);
 
         // when
-        int cycles = 100_000;
+        int cycles = 1000;
         CountDownLatch latch = new CountDownLatch(cycles);
         for (int i = 0; i < cycles; i++) {
             executorService.submit(() -> {

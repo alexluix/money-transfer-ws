@@ -2,6 +2,7 @@ package pro.landlabs.money.transfer.ws.value;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.MoreObjects;
 
 import java.math.BigDecimal;
 
@@ -31,6 +32,15 @@ public class MoneyTransferResult {
 
     public BigDecimal getAmount() {
         return amount;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("withdrawalAccount", withdrawalAccount)
+                .add("depositAccount", depositAccount)
+                .add("amount", amount)
+                .toString();
     }
 
 }

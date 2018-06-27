@@ -57,17 +57,34 @@ public class AccountService {
         Account withdrawalAccount = accounts.get(withdrawalAccountId);
         Account depositAccount = accounts.get(depositAccountId);
 
-        if (withdrawalAccount == null || depositAccount == null) throw new NotFoundException();
+        if (withdrawalAccount == null) {
+            logger.info("Withdrawal account not found: {}", withdrawalAccountId);
 
-        BigDecimal remaining = withdrawalAccount.getBalance().subtract(amount);
+            throw new NotFoundException();
+        }
+        if (depositAccount == null) {
+            logger.info("Deposit account not found: {}", depositAccountId);
+
+            throw new NotFoundException();
+        }
+
+        BigDecimal balance = withdrawalAccount.getBalance();
+        BigDecimal remaining = balance.subtract(amount);
         if (remaining.compareTo(BigDecimal.ZERO) < 0) {
+            logger.info("Insufficient funds: balance {}, requested {}", balance, amount);
+
             throw new NotAcceptableException();
         }
 
         withdrawalAccount.setBalance(remaining);
         depositAccount.setBalance(depositAccount.getBalance().add(amount));
 
-        return new MoneyTransferResult(withdrawalAccount, depositAccount, amount);
+        MoneyTransferResult moneyTransferResult =
+                new MoneyTransferResult(withdrawalAccount, depositAccount, amount);
+
+        logger.info("Money transferred: {}", moneyTransferResult);
+
+        return moneyTransferResult;
     }
 
 }

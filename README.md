@@ -11,7 +11,7 @@ Simple money transfer web service.
 
 -   REST API
 -   authentication unsupported
--   in-memory storage
+-   in-memory storage – accounts are forgotten on server restart
 
 ## Technologies
 

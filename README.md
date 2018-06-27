@@ -1,5 +1,7 @@
 # money-transfer-ws
 
+[![Build Status](https://travis-ci.org/landpro/money-transfer-ws.svg?branch=master)](https://travis-ci.org/landpro/money-transfer-ws)
+
 Simple money transfer web service.
 
 ## Functionality

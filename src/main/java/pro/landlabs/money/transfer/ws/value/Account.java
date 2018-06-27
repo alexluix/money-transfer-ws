@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public class Account {
 
     private final int id;
-    private final BigDecimal balance;
+    private BigDecimal balance;
 
     @JsonCreator
     public Account(@JsonProperty("id") int id, @JsonProperty("balance") BigDecimal balance) {
@@ -31,6 +31,10 @@ public class Account {
                 .add("id", id)
                 .add("balance", balance)
                 .toString();
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
 }

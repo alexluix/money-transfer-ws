@@ -31,6 +31,8 @@ import static org.junit.Assert.assertThat;
 
 public class AccountsResourceTest {
 
+    private static final String API_ENDPOINT = "accounts";
+
     private final TypeReference accountsTypeRef = new TypeReference<List<Account>>() { };
     private final GenericType<List<Account>> accountsGenericType = new GenericType<>(accountsTypeRef.getType());
 
@@ -76,7 +78,7 @@ public class AccountsResourceTest {
         int accountId = createAccountById(balance);
 
         // when
-        Response response = target.path("accounts/" + accountId).request().get();
+        Response response = target.path(API_ENDPOINT + "/" + accountId).request().get();
 
         // then
         assertThat(response.getStatus(), equalTo(HttpStatus.OK_200.getStatusCode()));
@@ -92,7 +94,38 @@ public class AccountsResourceTest {
         int nonExistingAccountId = 567485326;
 
         // when
-        Response response = target.path("accounts/" + nonExistingAccountId).request().get();
+        Response response = target.path(API_ENDPOINT + "/" + nonExistingAccountId).request().get();
+
+        // then
+        assertThat(response.getStatus(), equalTo(HttpStatus.NO_CONTENT_204.getStatusCode()));
+    }
+
+    @Test
+    public void shouldDeleteAccount() {
+        // given
+        int accountId = createAccountById(500);
+
+        // when
+        Response response = target.path(API_ENDPOINT + "/" + accountId).request().delete();
+
+        // then
+        assertThat(response.getStatus(), equalTo(HttpStatus.NO_CONTENT_204.getStatusCode()));
+
+        Response listAllResponse = target.path(API_ENDPOINT).request().get();
+        List<Account> accounts = listAllResponse.readEntity(accountsGenericType);
+        Optional<Account> foundDeletedAccount = accounts.stream()
+                .filter(account -> account.getId() == accountId).findFirst();
+
+        assertThat(foundDeletedAccount.isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldNotDeleteNonExistingAccount() {
+        // given
+        int nonExistingAccountId = 340004328;
+
+        // when
+        Response response = target.path(API_ENDPOINT + "/" + nonExistingAccountId).request().delete();
 
         // then
         assertThat(response.getStatus(), equalTo(HttpStatus.NO_CONTENT_204.getStatusCode()));
@@ -131,7 +164,7 @@ public class AccountsResourceTest {
         int account2Id = createAccountById(balance2);
 
         // when
-        Response response = target.path("accounts").request().get();
+        Response response = target.path(API_ENDPOINT).request().get();
 
         assertThat(response.getStatus(), equalTo(HttpStatus.OK_200.getStatusCode()));
         assertThat(response.getMediaType(), equalTo(MediaType.APPLICATION_JSON_TYPE));
@@ -161,7 +194,7 @@ public class AccountsResourceTest {
     private Response createAccount(int balance) {
         CreateAccount createAccount = new CreateAccount(new BigDecimal(balance));
         Entity<CreateAccount> entity = Entity.entity(createAccount, MediaType.APPLICATION_JSON_TYPE);
-        return target.path("accounts").request().post(entity);
+        return target.path(API_ENDPOINT).request().post(entity);
     }
 
 }

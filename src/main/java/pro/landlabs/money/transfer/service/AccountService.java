@@ -37,4 +37,12 @@ public class AccountService {
         return accounts.get(accountId);
     }
 
+    public void deleteAccount(int accountId) {
+        Account deletedAccount = accounts.remove(accountId);
+
+        if (deletedAccount != null) {
+            logger.info("Account deleted: {}", deletedAccount);
+        }
+    }
+
 }

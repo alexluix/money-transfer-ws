@@ -39,4 +39,12 @@ public class AccountsResource {
                 .build();
     }
 
+    @DELETE
+    @Path("{id}")
+    public Response deleteAccount(@PathParam("id") int accountId) {
+        accountService.deleteAccount(accountId);
+
+        return Response.noContent().build();
+    }
+
 }

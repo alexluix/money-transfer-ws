@@ -39,7 +39,7 @@
             <artifactId>jersey-hk2</artifactId>
         </dependency>
 
-         <dependency>
+        <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-binding</artifactId>
         </dependency>
@@ -71,7 +71,22 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>pro.landlabs.money.transfer.Main</mainClass>
+                    <mainClass>pro.landlabs.money.transfer.Application</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>pro.landlabs.money.transfer.Application</mainClass>
                 </configuration>
             </plugin>
         </plugins>

@@ -18,11 +18,11 @@ public class MyResourceTest {
 
     @Before
     public void setUp() {
-        server = Main.startServer();
+        server = Application.startServer();
 
         Client c = ClientBuilder.newClient();
 
-        target = c.target(Main.BASE_URI);
+        target = c.target(Application.BASE_URI);
     }
 
     @After

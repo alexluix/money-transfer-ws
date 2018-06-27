@@ -57,6 +57,10 @@ public abstract class AccountsWebserviceAbstractTest {
     }
 
     protected int createAccountById(int balance) {
+        return createAccountById(new BigDecimal(balance));
+    }
+
+    protected int createAccountById(BigDecimal balance) {
         Response response = createAccount(balance);
         assertThat(response.getStatus(), equalTo(HttpStatus.CREATED_201.getStatusCode()));
 
@@ -65,7 +69,11 @@ public abstract class AccountsWebserviceAbstractTest {
     }
 
     protected Response createAccount(int balance) {
-        CreateAccount createAccount = new CreateAccount(new BigDecimal(balance));
+        return createAccount(new BigDecimal(balance));
+    }
+
+    protected Response createAccount(BigDecimal balance) {
+        CreateAccount createAccount = new CreateAccount(balance);
         Entity<CreateAccount> entity = Entity.entity(createAccount, MediaType.APPLICATION_JSON_TYPE);
         return target.path(API_ENDPOINT).request().post(entity);
     }

@@ -16,6 +16,7 @@ public class Application {
         final ResourceConfig rc = new ResourceConfig()
                 .packages("pro.landlabs.money.transfer")
                 .register(MyObjectMapperProvider.class)
+                .register(new DependencyBinder())
                 .register(JacksonFeature.class);
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);

@@ -1,14 +1,14 @@
 package pro.landlabs.money.transfer.ws;
 
-import com.google.common.collect.Lists;
+import pro.landlabs.money.transfer.service.AccountService;
 import pro.landlabs.money.transfer.ws.value.Account;
+import pro.landlabs.money.transfer.ws.value.CreateAccount;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.inject.Inject;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.math.BigDecimal;
+import javax.ws.rs.core.Response;
+import java.net.URI;
 import java.util.List;
 
 @Path("accounts")
@@ -16,14 +16,21 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class AccountsResource {
 
-    public static final int ACCOUNT_DEFAULT_ID = 1;
-    public static final int ACCOUNT_DEFAULT_BALANCE = 150;
-
-    private final Account defaultAccount = new Account(ACCOUNT_DEFAULT_ID, new BigDecimal(ACCOUNT_DEFAULT_BALANCE));
+    @Inject
+    AccountService accountService;
 
     @GET
     public List<Account> getAccounts() {
-        return Lists.newArrayList(defaultAccount, defaultAccount);
+        return accountService.getAccounts();
+    }
+
+    @POST
+    public Response createAccount(CreateAccount createAccount) {
+        Account account = accountService.createAccount(createAccount);
+
+        return Response.created(URI.create("/accounts/" + account.getId()))
+                .entity(account)
+                .build();
     }
 
 }

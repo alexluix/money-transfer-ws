@@ -2,6 +2,8 @@ package pro.landlabs.money.transfer.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pro.landlabs.money.transfer.ws.value.Account;
 import pro.landlabs.money.transfer.ws.value.CreateAccount;
 
@@ -10,6 +12,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AccountService {
+
+    private final static Logger logger = LoggerFactory.getLogger(AccountService.class);
 
     private final AtomicInteger idSequence = new AtomicInteger(1);
     private final Map<Integer, Account> accounts = Maps.newConcurrentMap();
@@ -23,6 +27,8 @@ public class AccountService {
 
         Account account = new Account(idSequence.getAndIncrement(), createAccount.getBalance());
         accounts.put(account.getId(), account);
+
+        logger.info("Account created: {}", account);
 
         return account;
     }

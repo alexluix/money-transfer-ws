@@ -2,6 +2,7 @@ package pro.landlabs.money.transfer.ws.value;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.MoreObjects;
 
 import java.math.BigDecimal;
 
@@ -22,6 +23,14 @@ public class Account {
 
     public BigDecimal getBalance() {
         return balance;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("balance", balance)
+                .toString();
     }
 
 }

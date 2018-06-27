@@ -1,6 +1,7 @@
 # money-transfer-ws
 
 [![Build Status](https://travis-ci.org/landpro/money-transfer-ws.svg?branch=master)](https://travis-ci.org/landpro/money-transfer-ws)
+[![codecov](https://codecov.io/gh/landpro/money-transfer-ws/branch/master/graph/badge.svg)](https://codecov.io/gh/landpro/money-transfer-ws)
 
 Simple money transfer web service.
 

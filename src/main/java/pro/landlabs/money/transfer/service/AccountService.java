@@ -68,6 +68,24 @@ public class AccountService {
             throw new NotFoundException();
         }
 
+        Object lock1;
+        Object lock2;
+        if (withdrawalAccount.getId() < depositAccount.getId()) {
+            lock1 = withdrawalAccount;
+            lock2 = depositAccount;
+        } else {
+            lock1 = depositAccount;
+            lock2 = withdrawalAccount;
+        }
+
+        synchronized (lock1) {
+            synchronized (lock2) {
+                return doTransfer(amount, withdrawalAccount, depositAccount);
+            }
+        }
+    }
+
+    private MoneyTransferResult doTransfer(BigDecimal amount, Account withdrawalAccount, Account depositAccount) {
         BigDecimal balance = withdrawalAccount.getBalance();
         BigDecimal remaining = balance.subtract(amount);
         if (remaining.compareTo(BigDecimal.ZERO) < 0) {
@@ -83,7 +101,6 @@ public class AccountService {
                 new MoneyTransferResult(withdrawalAccount, depositAccount, amount);
 
         logger.info("Money transferred: {}", moneyTransferResult);
-
         return moneyTransferResult;
     }
 

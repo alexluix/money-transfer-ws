@@ -148,7 +148,7 @@ Content-Type: application/json
   "amount" : 150
 }
 ```
-### Erroneous Responses
+#### Erroneous Responses
 
 -   400 Bad Request: Invalid transfer parameters
 -   404 Not Found: Account not found

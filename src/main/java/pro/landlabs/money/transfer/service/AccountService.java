@@ -101,6 +101,7 @@ public class AccountService {
                 new MoneyTransferResult(withdrawalAccount, depositAccount, amount);
 
         logger.info("Money transferred: {}", moneyTransferResult);
+
         return moneyTransferResult;
     }
 

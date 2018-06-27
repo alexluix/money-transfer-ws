@@ -30,8 +30,7 @@ public abstract class AccountsWebserviceAbstractTest {
 
     protected static final String API_ENDPOINT = "accounts";
 
-    protected final TypeReference accountsTypeRef = new TypeReference<List<Account>>() {
-    };
+    protected final TypeReference accountsTypeRef = new TypeReference<List<Account>>() {};
     protected final GenericType<List<Account>> accountsGenericType = new GenericType<>(accountsTypeRef.getType());
 
     protected HttpServer server;

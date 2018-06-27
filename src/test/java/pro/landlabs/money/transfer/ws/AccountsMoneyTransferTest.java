@@ -15,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class MoneyTransferTest extends AccountsResourceAbstractTest {
+public class AccountsMoneyTransferTest extends AccountsWebserviceAbstractTest {
 
     public static final String API_TRANSFER = API_ENDPOINT + "/transfer";
 

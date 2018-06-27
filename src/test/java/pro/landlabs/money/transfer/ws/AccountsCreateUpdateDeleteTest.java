@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertThat;
 
-public class AccountCreateUpdateDeleteTest extends AccountsResourceAbstractTest {
+public class AccountsCreateUpdateDeleteTest extends AccountsWebserviceAbstractTest {
 
     @Test
     public void shouldCreateAccount() {

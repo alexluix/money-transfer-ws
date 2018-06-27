@@ -24,7 +24,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public abstract class AccountsResourceAbstractTest {
+public abstract class AccountsWebserviceAbstractTest {
 
     protected static final String API_ENDPOINT = "accounts";
 

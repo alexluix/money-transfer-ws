@@ -14,9 +14,12 @@ import java.math.BigDecimal;
 @Produces(MediaType.APPLICATION_JSON)
 public class AccountsResource {
 
+    public static final int ACCOUNT_DEFAULT_ID = 1;
+    public static final int ACCOUNT_DEFAULT_BALANCE = 150;
+
     @GET
     public Account getAccount() {
-        return new Account(1, new BigDecimal(150));
+        return new Account(ACCOUNT_DEFAULT_ID, new BigDecimal(ACCOUNT_DEFAULT_BALANCE));
     }
 
 }

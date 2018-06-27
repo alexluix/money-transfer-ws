@@ -2,6 +2,7 @@ package pro.landlabs.money.transfer;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
@@ -12,7 +13,10 @@ public class Application {
     public static final String BASE_URI = "http://localhost:8080/";
 
     public static HttpServer startServer() {
-        final ResourceConfig rc = new ResourceConfig().packages("pro.landlabs.money.transfer");
+        final ResourceConfig rc = new ResourceConfig()
+                .packages("pro.landlabs.money.transfer")
+                .register(MyObjectMapperProvider.class)
+                .register(JacksonFeature.class);
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }

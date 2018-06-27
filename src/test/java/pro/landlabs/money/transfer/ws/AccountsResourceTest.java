@@ -70,6 +70,35 @@ public class AccountsResourceTest {
     }
 
     @Test
+    public void shouldGetAccount() {
+        // given
+        int balance = 507;
+        int accountId = createAccountById(balance);
+
+        // when
+        Response response = target.path("accounts/" + accountId).request().get();
+
+        // then
+        assertThat(response.getStatus(), equalTo(HttpStatus.OK_200.getStatusCode()));
+
+        Account account = response.readEntity(Account.class);
+        assertThat(account.getId(), greaterThan(0));
+        assertThat(account.getBalance().intValue(), equalTo(balance));
+    }
+
+    @Test
+    public void shouldNotGetNonExistingAccount() {
+        // given
+        int nonExistingAccountId = 567485326;
+
+        // when
+        Response response = target.path("accounts/" + nonExistingAccountId).request().get();
+
+        // then
+        assertThat(response.getStatus(), equalTo(HttpStatus.NO_CONTENT_204.getStatusCode()));
+    }
+
+    @Test
     public void shouldCreateMultipleAccounts() {
         // given
         int balance1 = 601;

@@ -29,6 +29,18 @@ public class AccountServiceTest {
         assertThat(account.getBalance().intValue(), equalTo(balance));
     }
 
+    @Test
+    public void shouldGetAccount() {
+        int balance = 601;
+        int accountId = createAccount(balance).getId();
+
+        Account account = subject.getAccount(accountId);
+
+        assertThat(account, notNullValue());
+        assertThat(account.getId(), equalTo(accountId));
+        assertThat(account.getBalance().intValue(), equalTo(balance));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldRejectNull() {
         subject.createAccount(null);

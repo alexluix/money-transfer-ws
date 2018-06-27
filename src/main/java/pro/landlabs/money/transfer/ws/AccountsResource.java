@@ -17,11 +17,17 @@ import java.util.List;
 public class AccountsResource {
 
     @Inject
-    AccountService accountService;
+    private AccountService accountService;
 
     @GET
     public List<Account> getAccounts() {
         return accountService.getAccounts();
+    }
+
+    @GET
+    @Path("{id}")
+    public Account getAccount(@PathParam("id") int accountId) {
+        return accountService.getAccount(accountId);
     }
 
     @POST

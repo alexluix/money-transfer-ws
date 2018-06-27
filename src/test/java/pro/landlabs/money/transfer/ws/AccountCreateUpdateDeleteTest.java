@@ -1,25 +1,11 @@
 package pro.landlabs.money.transfer.ws;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import pro.landlabs.money.transfer.Application;
-import pro.landlabs.money.transfer.MyObjectMapperProvider;
 import pro.landlabs.money.transfer.ws.value.Account;
-import pro.landlabs.money.transfer.ws.value.CreateAccount;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,31 +15,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertThat;
 
-public class AccountsResourceTest {
-
-    private static final String API_ENDPOINT = "accounts";
-
-    private final TypeReference accountsTypeRef = new TypeReference<List<Account>>() { };
-    private final GenericType<List<Account>> accountsGenericType = new GenericType<>(accountsTypeRef.getType());
-
-    private HttpServer server;
-    private WebTarget target;
-
-    @Before
-    public void setUp() {
-        server = Application.startServer();
-
-        Client c = ClientBuilder.newClient()
-                .register(MyObjectMapperProvider.class)
-                .register(JacksonFeature.class);
-
-        target = c.target(Application.BASE_URI);
-    }
-
-    @After
-    public void tearDown() {
-        server.shutdownNow();
-    }
+public class AccountCreateUpdateDeleteTest extends AccountsResourceAbstractTest {
 
     @Test
     public void shouldCreateAccount() {
@@ -181,20 +143,6 @@ public class AccountsResourceTest {
                 .filter(account -> account.getId() == account2Id).findFirst();
         assertThat(account2.isPresent(), is(true));
         assertThat(account2.get().getBalance().intValue(), is(balance2));
-    }
-
-    private int createAccountById(int balance) {
-        Response response = createAccount(balance);
-        assertThat(response.getStatus(), equalTo(HttpStatus.CREATED_201.getStatusCode()));
-
-        Account account = response.readEntity(Account.class);
-        return account.getId();
-    }
-
-    private Response createAccount(int balance) {
-        CreateAccount createAccount = new CreateAccount(new BigDecimal(balance));
-        Entity<CreateAccount> entity = Entity.entity(createAccount, MediaType.APPLICATION_JSON_TYPE);
-        return target.path(API_ENDPOINT).request().post(entity);
     }
 
 }

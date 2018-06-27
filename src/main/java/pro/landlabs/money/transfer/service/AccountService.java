@@ -6,7 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pro.landlabs.money.transfer.ws.value.Account;
 import pro.landlabs.money.transfer.ws.value.CreateAccount;
+import pro.landlabs.money.transfer.ws.value.MoneyTransferResult;
 
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotAcceptableException;
+import javax.ws.rs.NotFoundException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -43,6 +48,26 @@ public class AccountService {
         if (deletedAccount != null) {
             logger.info("Account deleted: {}", deletedAccount);
         }
+    }
+
+    public MoneyTransferResult transfer(int withdrawalAccountId, int depositAccountId, BigDecimal amount) {
+        if (withdrawalAccountId == depositAccountId) throw new BadRequestException();
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) throw new BadRequestException();
+
+        Account withdrawalAccount = accounts.get(withdrawalAccountId);
+        Account depositAccount = accounts.get(depositAccountId);
+
+        if (withdrawalAccount == null || depositAccount == null) throw new NotFoundException();
+
+        BigDecimal remaining = withdrawalAccount.getBalance().subtract(amount);
+        if (remaining.compareTo(BigDecimal.ZERO) < 0) {
+            throw new NotAcceptableException();
+        }
+
+        withdrawalAccount.setBalance(remaining);
+        depositAccount.setBalance(depositAccount.getBalance().add(amount));
+
+        return new MoneyTransferResult(withdrawalAccount, depositAccount, amount);
     }
 
 }

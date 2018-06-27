@@ -26,9 +26,12 @@ import static org.junit.Assert.assertThat;
 
 public abstract class AccountsWebserviceAbstractTest {
 
+    protected static final int DEFAULT_BALANCE = 1000;
+
     protected static final String API_ENDPOINT = "accounts";
 
-    protected final TypeReference accountsTypeRef = new TypeReference<List<Account>>() { };
+    protected final TypeReference accountsTypeRef = new TypeReference<List<Account>>() {
+    };
     protected final GenericType<List<Account>> accountsGenericType = new GenericType<>(accountsTypeRef.getType());
 
     protected HttpServer server;
@@ -48,6 +51,10 @@ public abstract class AccountsWebserviceAbstractTest {
     @After
     public void tearDown() {
         server.shutdownNow();
+    }
+
+    protected int createAccountById() {
+        return createAccountById(DEFAULT_BALANCE);
     }
 
     protected int createAccountById(int balance) {

@@ -20,6 +20,70 @@ public class AccountsMoneyTransferTest extends AccountsWebserviceAbstractTest {
     public static final String API_TRANSFER = API_ENDPOINT + "/transfer";
 
     @Test
+    public void shouldNotTransferToNonExistingAccount() {
+        // given
+        int accountId = createAccountById();
+        int nonExistingAccount = 647832549;
+
+        // when
+        Response response = moneyTransferResponse(accountId, nonExistingAccount, 1);
+
+        // then
+        assertThat(response.getStatus(), equalTo(HttpStatus.NOT_FOUND_404.getStatusCode()));
+    }
+
+    @Test
+    public void shouldNotTransferFromNonExistingAccount() {
+        // given
+        int accountId = createAccountById();
+        int nonExistingAccount = 647832549;
+
+        // when
+        Response response = moneyTransferResponse(nonExistingAccount, accountId, 1);
+
+        // then
+        assertThat(response.getStatus(), equalTo(HttpStatus.NOT_FOUND_404.getStatusCode()));
+    }
+
+    @Test
+    public void shouldNotTransferNegative() {
+        // given
+        int accountFromId = createAccountById();
+        int accountToId = createAccountById();
+
+        // when
+        Response response = moneyTransferResponse(accountFromId, accountToId, -1);
+
+        // then
+        assertThat(response.getStatus(), equalTo(HttpStatus.BAD_REQUEST_400.getStatusCode()));
+    }
+
+    @Test
+    public void shouldNotTransferZeroAmount() {
+        // given
+        int accountFromId = createAccountById();
+        int accountToId = createAccountById();
+
+        // when
+        Response response = moneyTransferResponse(accountFromId, accountToId, 0);
+
+        // then
+        assertThat(response.getStatus(), equalTo(HttpStatus.BAD_REQUEST_400.getStatusCode()));
+    }
+
+    @Test
+    public void shouldNotTransferToTheSameAccount() {
+        // given
+        int accountId = createAccountById();
+
+        // when
+        Response response = moneyTransferResponse(accountId, accountId, 1);
+
+        // then
+        assertThat(response.getStatus(), equalTo(HttpStatus.BAD_REQUEST_400.getStatusCode()));
+    }
+
+    @Test
     public void shouldTransferMoneyFromOneAccountToTheOther() {
         // given
         int balanceA = 100;
@@ -28,9 +92,10 @@ public class AccountsMoneyTransferTest extends AccountsWebserviceAbstractTest {
         int accountAId = createAccountById(balanceA);
         int accountBId = createAccountById(balanceB);
 
-        // then
+        // when
         MoneyTransferResult moneyTransferResult = moneyTransfer(accountAId, accountBId, transferAmount);
 
+        // then
         assertThat(moneyTransferResult, notNullValue());
         assertThat(moneyTransferResult.getAmount().intValue(), equalTo(transferAmount));
 
@@ -42,14 +107,18 @@ public class AccountsMoneyTransferTest extends AccountsWebserviceAbstractTest {
     }
 
     private MoneyTransferResult moneyTransfer(int withdrawalAccountId, int depositAccountId, int transferAmount) {
+        Response response = moneyTransferResponse(withdrawalAccountId, depositAccountId, transferAmount);
+        assertThat(response.getStatus(), equalTo(HttpStatus.OK_200.getStatusCode()));
+
+        return response.readEntity(MoneyTransferResult.class);
+    }
+
+    private Response moneyTransferResponse(int withdrawalAccountId, int depositAccountId, int transferAmount) {
         BigDecimal amount = new BigDecimal(transferAmount);
         MoneyTransfer moneyTransfer = new MoneyTransfer(withdrawalAccountId, depositAccountId, amount);
 
         Entity<MoneyTransfer> entity = Entity.entity(moneyTransfer, MediaType.APPLICATION_JSON_TYPE);
-        Response response = target.path(API_TRANSFER).request().post(entity);
-        assertThat(response.getStatus(), equalTo(HttpStatus.OK_200.getStatusCode()));
-
-        return response.readEntity(MoneyTransferResult.class);
+        return target.path(API_TRANSFER).request().post(entity);
     }
 
 }

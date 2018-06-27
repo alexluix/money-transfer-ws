@@ -8,4 +8,6 @@ cache:
 
 script:
   - mvn clean package
-  - bash <(curl -s https://codecov.io/bash)
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -t ab434b05-271d-4269-afc6-fbbde4dcef6d
